@@ -42,14 +42,13 @@ async function deleteTask(taskId) {
 async function toggleStatus(taskId) {
     let task = await getTask(taskId)
     
-    if (!task) {return}
-    
-    task.completed = !task.completed
-    TaskMap.set(taskId,task)
-
     await sleep(10)
-    return task
-}
+
+    if (task) {
+        task.completed = !task.completed
+        return task
+    }
+} 
 
 module.exports = {
     getTask,
