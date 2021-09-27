@@ -9,9 +9,7 @@ const TaskController = {
                 data: taskList
             })
         } catch (error) {
-            return res.status(500).json({
-                message: 'somethinhg went wrong'
-            })
+            next(error)
         }
     },
 
@@ -24,9 +22,7 @@ const TaskController = {
                 data: newTask
             })
         } catch (error) {
-            return res.status(500).json({
-                message: 'somethinhg went wrong'
-            })
+            next(error)
         }   
     }
 }
