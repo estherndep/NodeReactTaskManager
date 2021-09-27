@@ -8,30 +8,14 @@ import TaskInput from '../../components/TaskInput'
 axios.defaults.baseURL = 'http://localhost:3000'
 
 const App = () => {
-    const [tasks, setTasks] = useState([
-        {
-            id: 12345,
-            description: "Test task description",
-            completed: false
-        },
-        {
-            id: 12347,
-            description: "Test task description 2",
-            completed: false
-        },
-        {
-            id: 12346,
-            description: "Test task description 3",
-            completed: true
-        }
-    ])
+    const [tasks, setTasks] = useState([])
 
     useEffect(() => {
         async function initialiseTasks() {
             const fetchedTasks = await fetchTasks()
 
             console.log(fetchedTasks)
-            setTasks([...tasks,fetchedTasks]) 
+            setTasks(fetchedTasks) 
         }
     
         initialiseTasks()
@@ -46,9 +30,24 @@ const App = () => {
 
     //add task
     const addTask = async (task) => {
+        console.log(task)
         const res = await axios.post('/tasks/create', task)
     
-        setTasks([...tasks, res.data.data])
+        res.status === 201
+        ? setTasks([...tasks, res.data.data])
+        : alert('Error adding this task')
+    }
+
+    // Toggle task status
+    const toggleStatus = async (id) => {
+        const res = await axios.post(`/tasks/${id}/toggle-status`)
+        const updatedTask = res.data.data
+
+        let updatedTaskList = tasks.map((task) =>
+            task.id === updatedTask.id ? updatedTask : task
+        )
+
+        setTasks(updatedTaskList)
     }
 
     return (
@@ -61,10 +60,12 @@ const App = () => {
                     <TaskList
                         title="Pending"
                         tasks={tasks.filter((task) => !task.completed)}
+                        onToggle={toggleStatus}
                     />
                     <TaskList
                         title="Completed"
                         tasks={tasks.filter((task) => task.completed)}
+                        onToggle={toggleStatus}
                     />
                 </>
             ) : (

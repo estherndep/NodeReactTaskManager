@@ -1,6 +1,7 @@
 const TaskController = require('../../controllers/Task')
 const TaskModel = require('../../models/Task')
 const httpMocks = require('node-mocks-http')
+const errorHandler = require('../../middleware/errorHandler')
 const {validTaskEntry,createdTask,completedTask} = require('../data')
 
 TaskModel.createTask = jest.fn(),
@@ -15,7 +16,7 @@ let taskFields = ["id","description","completed"]
 beforeEach(()=>{
     req = httpMocks.createRequest()
     res = httpMocks.createResponse()
-    next = null
+    next = () => {}
 })
 
 describe('TaskController.getTaskList function', () => {
@@ -74,5 +75,37 @@ describe('TaskController.createTask function', () => {
         
         expect(Object.keys(res._getJSONData().data))
         .toEqual(expect.arrayContaining(taskFields))
+    })
+})
+
+describe('toggleTaskStatus function', () => {
+    it('should exist', () => {
+        expect(typeof TaskController.createTask)
+        .toBe("function")
+    })
+
+    it('should call TaskModel.toggleStatus', async () => {
+        let id = '123456'
+        req.params = {id}
+
+        await TaskController.toggleTaskStatus(req,res,next)
+        expect(TaskModel.toggleStatus).toBeCalledWith(id)
+    })
+
+    it('should return 200 response status', async () => {
+        await TaskController.toggleTaskStatus(req,res,next)
+        expect(res.statusCode).toBe(200)
+    })
+
+    it('should return object containing updated task', async () => {
+        TaskModel.toggleStatus.mockReturnValue(completedTask)
+
+        await TaskController.toggleTaskStatus(req,res,next)
+        
+        const response = res._getJSONData().data
+
+        expect(response.id).toEqual(completedTask.id)
+        expect(Object.keys(response))
+            .toEqual(expect.arrayContaining(taskFields))
     })
 })
