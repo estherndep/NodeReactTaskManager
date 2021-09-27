@@ -49,3 +49,31 @@ describe('TaskController.getTaskList function', () => {
             .toEqual(expect.arrayContaining(taskFields))
     })
 })
+
+describe('TaskController.createTask function', () => {
+    it('should exist', () => {
+        expect(typeof TaskController.createTask)
+        .toBe("function")
+    })
+    it('should call TaskModel.createTask', async () => {
+        req.body = validTaskEntry
+        await TaskController.createTask(req,res,next)
+
+        expect(TaskModel.createTask).toBeCalledWith(validTaskEntry.description)
+    })
+    it('should return 201 response status', async () => {
+        req.body = validTaskEntry
+        await TaskController.createTask(req,res,next)
+
+        expect(res.statusCode).toBe(201)
+    })
+    it('should return json object containing new task object', async () => {
+        req.body = validTaskEntry
+        TaskModel.createTask.mockReturnValue(taskFields)
+
+        await TaskController.createTask(req,res,next)
+        
+        expect(Object.keys(res._getJSONData().data))
+        .toEqual(expect.arrayContaining(expectedFields))
+    })
+})
