@@ -53,5 +53,42 @@ describe(`POST ${baseURL}/create`, () => {
 
             expect(response.statusCode).toBe(400)
         })
+    }) 
+
+    describe(`POST ${baseURL}/:id/toggle-status`, () => {
+        describe('given an id for a task that exists', () => {
+            let id
+    
+            beforeEach(async () => {
+                const createResponse = await request(app)
+                    .post(`${baseURL}/create`)
+                    .send(JSON.parse(validTaskEntry))
+                
+                id = createResponse.body.data.id
+            });
+    
+            it('should return 200 status code',async () => {
+                const toggleResponse = await request(app)
+                    .post(`${baseURL}/${id}/toggle-status`)
+    
+                expect(toggleResponse.statusCode).toBe(200)
+            })
+    
+            it('should respond with a JSON object of updated task with changed status', async () => {
+                const toggleResponse = await request(app)
+                    .post(`${baseURL}/${id}/toggle-status`)
+    
+                expect(toggleResponse.body.data.completed).toBe(true)
+            })
+        })
+    
+        describe('given an id for a task that does not exist', () => {
+            it('should return 400 status code',async () => {
+                const toggleResponse = await request(app)
+                    .post(`${baseURL}/111111111111/toggle-status`)
+    
+                    expect(toggleResponse.statusCode).toBe(400)
+                })
+        })
     })
 })

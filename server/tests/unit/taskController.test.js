@@ -76,3 +76,35 @@ describe('TaskController.createTask function', () => {
         .toEqual(expect.arrayContaining(taskFields))
     })
 })
+
+describe('toggleTaskStatus function', () => {
+    it('should exist', () => {
+        expect(typeof TaskController.createTask)
+        .toBe("function")
+    })
+
+    it('should call TaskModel.toggleStatus', async () => {
+        let id = '123456'
+        req.params = {id}
+
+        await TaskController.toggleTaskStatus(req,res,next)
+        expect(TaskModel.toggleStatus).toBeCalledWith(id)
+    })
+
+    it('should return 200 response status', async () => {
+        await TaskController.toggleTaskStatus(req,res,next)
+        expect(res.statusCode).toBe(200)
+    })
+
+    it('should return object containing updated task', async () => {
+        TaskModel.toggleStatus.mockReturnValue(completedTask)
+
+        await TaskController.toggleTaskStatus(req,res,next)
+        
+        const response = res._getJSONData().data
+
+        expect(response.id).toEqual(completedTask.id)
+        expect(Object.keys(response))
+            .toEqual(expect.arrayContaining(taskFields))
+    })
+})
