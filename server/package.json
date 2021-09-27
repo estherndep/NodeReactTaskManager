@@ -1,0 +1,22 @@
+{
+  "name": "NodeReactTaskManagerServer",
+  "version": "1.0.0",
+  "description": "React server for task manager app",
+  "main": "index.js",
+  "author": "Esther Ndep",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js --watch",
+    "test": "jest --watchAll"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "node-mocks-http": "^1.11.0"
+  },
+  "devDependencies": {
+    "jest": "^27.2.2",
+    "nodemon": "^2.0.13",
+    "supertest": "^6.1.6"
+  }
+}
