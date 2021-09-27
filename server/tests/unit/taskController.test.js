@@ -1,8 +1,7 @@
 const TaskController = require('../../controllers/Task')
 const TaskModel = require('../../models/Task')
 const httpMocks = require('node-mocks-http')
-const {createdTask} = require('../data')
-
+const {validTaskEntry,createdTask,completedTask} = require('../data')
 
 TaskModel.createTask = jest.fn(),
 TaskModel.getTask = jest.fn(),
@@ -69,11 +68,11 @@ describe('TaskController.createTask function', () => {
     })
     it('should return json object containing new task object', async () => {
         req.body = validTaskEntry
-        TaskModel.createTask.mockReturnValue(taskFields)
+        TaskModel.createTask.mockReturnValue(createdTask)
 
         await TaskController.createTask(req,res,next)
         
         expect(Object.keys(res._getJSONData().data))
-        .toEqual(expect.arrayContaining(expectedFields))
+        .toEqual(expect.arrayContaining(taskFields))
     })
 })

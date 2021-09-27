@@ -1,7 +1,10 @@
 const request = require('supertest')
 const app = require('../../app')
+const {validTaskEntry,createdTask,completedTask} = require('../data')
 
 const baseURL = '/tasks'
+
+let taskFields = ["id","description","completed"]
 
 describe(`GET ${baseURL}`, () => {
     it('should return an array of all tasks',async ()=>{
