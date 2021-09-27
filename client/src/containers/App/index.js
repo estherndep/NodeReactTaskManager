@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
+import axios from 'axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import TaskList from '../../components/TaskList'
+
+axios.defaults.baseURL = 'http://localhost:3000'
 
 const App = () => {
     const [tasks, setTasks] = useState([
@@ -21,6 +24,24 @@ const App = () => {
             completed: true
         }
     ])
+
+    useEffect(() => {
+        async function initialiseTasks() {
+            const fetchedTasks = await fetchTasks()
+
+            console.log(fetchedTasks)
+            setTasks([...tasks,fetchedTasks])
+        }
+    
+        initialiseTasks()
+    }, [])
+    
+    // Fetch Tasks
+    const fetchTasks = async () => {
+        const res = await axios.get('/tasks')
+
+        return res.data.data
+    }
 
     return (
         <div>
