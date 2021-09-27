@@ -8,5 +8,6 @@ const TaskController = require('../controllers/Task')
 router.get('/tasks', TaskController.getTaskList)
 
 router.post('/tasks/create', DtoValidator(DTOschemas.taskCreateDTO), TaskController.createTask)
+router.post('/tasks/:id/toggle-status', TaskController.toggleTaskStatus)
 
 module.exports = router
