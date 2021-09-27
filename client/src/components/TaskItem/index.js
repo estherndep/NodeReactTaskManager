@@ -1,10 +1,10 @@
 import React from 'react'
 
-const TaskItem = ({task}) => {
+const TaskItem = ({task,onToggle}) => {
     return (
-        <div>
-            <input type="checkbox" defaultChecked={task.completed}></input>
-            <h1>{task.description}</h1>
+        <div className="todo">
+            <input type="checkbox" defaultChecked={task.completed} onClick={()=>onToggle(task.id)}></input>
+            <span className="name">{task.description}</span>
         </div>
     )
 }

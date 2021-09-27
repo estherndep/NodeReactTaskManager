@@ -17,8 +17,8 @@ const TaskInput = ({ onAdd }) => {
   
     return (
       <form className='add-form' onSubmit={handleSubmit}>
+        <h4>Create a new todo</h4>
         <div className='form-control'>
-          <label>Task</label>
           <input
             type='text'
             placeholder='Add Task'
