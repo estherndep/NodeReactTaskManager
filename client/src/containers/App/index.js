@@ -3,6 +3,7 @@ import axios from 'axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import TaskList from '../../components/TaskList'
+import TaskInput from '../../components/TaskInput'
 
 axios.defaults.baseURL = 'http://localhost:3000'
 
@@ -30,7 +31,7 @@ const App = () => {
             const fetchedTasks = await fetchTasks()
 
             console.log(fetchedTasks)
-            setTasks([...tasks,fetchedTasks])
+            setTasks([...tasks,fetchedTasks]) 
         }
     
         initialiseTasks()
@@ -43,9 +44,17 @@ const App = () => {
         return res.data.data
     }
 
+    //add task
+    const addTask = async (task) => {
+        const res = await axios.post('/tasks/create', task)
+    
+        setTasks([...tasks, res.data.data])
+    }
+
     return (
         <div>
             <Header title="To Do List"/>
+            <TaskInput onAdd={addTask}/>
 
             {tasks.length > 0 ? (
                 <>

@@ -20,7 +20,7 @@ async function createTask(taskDescription) {
     //generate unique id
     //form new task object
     const newTask = {
-        id: TaskMap.size() + 1,
+        id: TaskMap.size + 1,
         description: taskDescription,
         completed: false
     }

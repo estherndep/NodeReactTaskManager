@@ -1,8 +1,7 @@
 const TaskController = require('../../controllers/Task')
 const TaskModel = require('../../models/Task')
 const httpMocks = require('node-mocks-http')
-const {createdTask} = require('../data')
-
+const {validTaskEntry,createdTask,completedTask} = require('../data')
 
 TaskModel.createTask = jest.fn(),
 TaskModel.getTask = jest.fn(),
@@ -47,5 +46,33 @@ describe('TaskController.getTaskList function', () => {
         expect(Array.isArray(response)).toBe(true)
         expect(Object.keys(response[0]))
             .toEqual(expect.arrayContaining(taskFields))
+    })
+})
+
+describe('TaskController.createTask function', () => {
+    it('should exist', () => {
+        expect(typeof TaskController.createTask)
+        .toBe("function")
+    })
+    it('should call TaskModel.createTask', async () => {
+        req.body = validTaskEntry
+        await TaskController.createTask(req,res,next)
+
+        expect(TaskModel.createTask).toBeCalledWith(validTaskEntry.description)
+    })
+    it('should return 201 response status', async () => {
+        req.body = validTaskEntry
+        await TaskController.createTask(req,res,next)
+
+        expect(res.statusCode).toBe(201)
+    })
+    it('should return json object containing new task object', async () => {
+        req.body = validTaskEntry
+        TaskModel.createTask.mockReturnValue(createdTask)
+
+        await TaskController.createTask(req,res,next)
+        
+        expect(Object.keys(res._getJSONData().data))
+        .toEqual(expect.arrayContaining(taskFields))
     })
 })
