@@ -1,6 +1,7 @@
 const TaskController = require('../../controllers/Task')
 const TaskModel = require('../../models/Task')
 const httpMocks = require('node-mocks-http')
+const errorHandler = require('../../middleware/errorHandler')
 const {validTaskEntry,createdTask,completedTask} = require('../data')
 
 TaskModel.createTask = jest.fn(),
@@ -15,7 +16,7 @@ let taskFields = ["id","description","completed"]
 beforeEach(()=>{
     req = httpMocks.createRequest()
     res = httpMocks.createResponse()
-    next = null
+    next = () => {}
 })
 
 describe('TaskController.getTaskList function', () => {

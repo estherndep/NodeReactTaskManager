@@ -85,7 +85,7 @@ describe(`POST ${baseURL}/create`, () => {
         describe('given an id for a task that does not exist', () => {
             it('should return 400 status code',async () => {
                 const toggleResponse = await request(app)
-                    .post(`${baseURL}/111111111111/toggle-status`)
+                    .post(`${baseURL}/10/toggle-status`)
     
                     expect(toggleResponse.statusCode).toBe(400)
                 })
