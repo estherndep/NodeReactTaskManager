@@ -51,6 +51,18 @@ const App = () => {
         setTasks([...tasks, res.data.data])
     }
 
+    // Toggle task status
+    const toggleStatus = async (id) => {
+        const res = await axios.post('/tasks/${id}/toggle-status')
+        const updatedTask = res.data.data
+
+        let updatedTaskList = tasks.map((task) =>
+            task.id === updatedTask.id ? updatedTask : task
+        )
+
+        setTasks(updatedTaskList)
+    }
+
     return (
         <div>
             <Header title="To Do List"/>
@@ -61,10 +73,12 @@ const App = () => {
                     <TaskList
                         title="Pending"
                         tasks={tasks.filter((task) => !task.completed)}
+                        onToggle={toggleStatus}
                     />
                     <TaskList
                         title="Completed"
                         tasks={tasks.filter((task) => task.completed)}
+                        onToggle={toggleStatus}
                     />
                 </>
             ) : (
